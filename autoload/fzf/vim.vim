@@ -1057,6 +1057,8 @@ function! fzf#vim#marks(...)
   silent marks
   redir END
   let list = split(cout, "\n")
+  call filter(list, 'matchstr(split(copy(v:val))[0], ''\h'') != ""')
+  call map(list, 'len(split(copy(v:val)))==4 && filereadable(expand(split(copy(v:val))[-1]))? join(add(split(copy(v:val))[0:2], expand(split(copy(v:val))[3]))): join(add(split(copy(v:val))[0:2], @%))')
   return s:fzf('marks', {
   \ 'source':  extend(list[0:0], map(list[1:], 's:format_mark(v:val)')),
   \ 'sink*':   s:function('s:mark_sink'),
